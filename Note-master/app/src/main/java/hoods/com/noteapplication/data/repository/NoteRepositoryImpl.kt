@@ -26,15 +26,15 @@ class NoteRepositoryImpl @Inject constructor(
         return noteDao.getBookmarkedNotes()
     }
 
-    override fun insert(note: Note) {
+    override suspend fun insert(note: Note) {
         noteDao.insertNote(note)
     }
 
-    override fun update(note: Note) {
+    override suspend fun update(note: Note) {
         noteDao.updateNote(note)
     }
 
-    override fun delete(id: Long) {
+    override suspend fun delete(id: Long) {
         noteDao.deleteNote(id)
     }
 }

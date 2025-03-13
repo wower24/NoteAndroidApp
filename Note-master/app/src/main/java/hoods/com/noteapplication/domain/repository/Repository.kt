@@ -8,7 +8,7 @@ interface Repository {
     fun getAllNotes() :Flow<List<Note>>
     fun getNoteById(id :Long) :Flow<Note>
     fun getBookmarkedNotes() :Flow<List<Note>>
-    fun insert(note :Note)
-    fun update(note :Note)
-    fun delete(id :Long)
+    suspend fun insert(note :Note)
+    suspend fun update(note :Note)
+    suspend fun delete(id :Long)
 }
