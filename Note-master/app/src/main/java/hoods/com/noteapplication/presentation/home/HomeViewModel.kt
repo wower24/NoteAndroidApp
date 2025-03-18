@@ -5,19 +5,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hoods.com.noteapplication.common.ScreenViewState
 import hoods.com.noteapplication.data.local.model.Note
-import hoods.com.noteapplication.domain.use_cases.AddUseCase
-import hoods.com.noteapplication.domain.use_cases.BookmarkNotesUseCase
 import hoods.com.noteapplication.domain.use_cases.DeleteUseCase
 import hoods.com.noteapplication.domain.use_cases.GetAllNotesUseCase
-import hoods.com.noteapplication.domain.use_cases.GetNoteByIdUseCase
 import hoods.com.noteapplication.domain.use_cases.UpdateUseCase
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,6 +45,17 @@ class HomeViewModel @Inject constructor(
                 _state.value = HomeState(notes = ScreenViewState.Error(it.message.toString()))
             }
             .launchIn(viewModelScope)
+    }
+
+    fun deleteNote(noteId: Long) = viewModelScope.launch {
+        deleteUseCase(noteId)
+    }
+
+    fun onBookmarkChange(note: Note) {
+        viewModelScope.launch {
+            //update bookmark value
+            updateUseCase(note.copy(isBookmarked = !note.isBookmarked))
+        }
     }
 }
 
