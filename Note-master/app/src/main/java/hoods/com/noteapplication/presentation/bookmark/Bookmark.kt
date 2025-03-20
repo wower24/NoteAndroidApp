@@ -45,7 +45,6 @@ fun BookmarkScreen(
                 }
             }
         }
-
         is ScreenViewState.Error -> {
             Text(
                 text = state.notes.message ?: "Unknown Error",
