@@ -1,14 +1,18 @@
 package hoods.com.noteapplication.presentation.detail
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.BookmarkRemove
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 //to be used outside this file
 @Composable
@@ -30,6 +35,35 @@ fun DetailScreen(
     assistedFactory: DetailAssistedFactory,
     navigateUp: () -> Unit
 ) {
+    //modelClass - a reference of what we want to build
+    //factory - what are we building with
+    val viewModel = viewModel(
+        modelClass = DetailViewModel::class.java,
+        factory = DetailViewModelFactory(
+            noteId = noteId,
+            assistedFactory = assistedFactory
+        )
+    )
+
+    //public DetailScreen - state composable
+    //private DetailScreen - stateless composable
+    val state = viewModel.state
+    DetailScreen(
+        modifier = modifier,
+        isUpdatingNote = state.isUpdatingNote,
+        isFormNotBlank = state.isUpdatingNote,
+        title = state.title,
+        content = state.content,
+        isBookmarked = state.isBookmarked,
+        onBookmarkChange = viewModel::onBookmarkChange,
+        onContentChange = viewModel::onContentChange,
+        onTitleChange = viewModel::onTitleChange,
+        onButtonClick = {
+            viewModel.addOrUpdateNote()
+            navigateUp()
+        },
+        onNavigate = navigateUp
+    )
 
 }
 
@@ -60,6 +94,35 @@ private fun DetailScreen(
         )
 
         Spacer(modifier = Modifier.Companion.size(12.dp))
+
+        //chow an icon button different depending on whether you're updating or not
+        AnimatedVisibility(isFormNotBlank) {
+            //row is needed to align the checkmark to the end
+            Row(
+                modifier = modifier.fillMaxWidth()
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(onClick = onButtonClick) {
+                    val icon = if(isUpdatingNote) Icons.Default.Update
+                        else Icons.Default.Check
+
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.Companion.size(12.dp))
+
+        NoteTextField(
+            modifier = Modifier.weight(1f),
+            value = content,
+            label = "Content",
+            onValueChange = onContentChange
+        )
     }
 }
 
