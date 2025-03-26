@@ -51,7 +51,7 @@ fun DetailScreen(
     DetailScreen(
         modifier = modifier,
         isUpdatingNote = state.isUpdatingNote,
-        isFormNotBlank = state.isUpdatingNote,
+        isFormNotBlank = viewModel.isFormNotBlank,
         title = state.title,
         content = state.content,
         isBookmarked = state.isBookmarked,
@@ -183,6 +183,7 @@ private fun NoteTextField(
         colors = TextFieldDefaults.colors(
             disabledContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
         ),

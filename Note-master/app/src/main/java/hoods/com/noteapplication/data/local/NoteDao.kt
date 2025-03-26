@@ -30,14 +30,14 @@ interface NoteDao {
     fun getBookmarkedNotes() :Flow<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(note :Note)
+    suspend fun insertNote(note :Note)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateNote(note :Note)
+    suspend fun updateNote(note :Note)
 
     //IF YOU DON'T DO ID AS A PARAMETER THIS WOULD DELETE ALL THE DATA
     @Query("DELETE FROM notes WHERE id=:id")
-    fun deleteNote(id :Long)
+    suspend fun deleteNote(id :Long)
 }
 
 //room database is an abstraction layer between database and application

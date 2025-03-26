@@ -26,6 +26,10 @@ class BookmarkViewModel @Inject constructor(
     private val _state: MutableStateFlow<BookmarkState> = MutableStateFlow(BookmarkState())
     val state: StateFlow<BookmarkState> = _state.asStateFlow()
 
+    init {
+        getBookmarkNotes()
+    }
+
     private fun getBookmarkNotes() {
         bookmarkNotesUseCase.invoke()
             .onEach {

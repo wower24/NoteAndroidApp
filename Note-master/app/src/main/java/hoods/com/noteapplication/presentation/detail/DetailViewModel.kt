@@ -39,9 +39,14 @@ class DetailViewModel @AssistedInject constructor(
                 id = id,
                 title = title,
                 content = content,
-                createdDate = createdDate
+                createdDate = createdDate,
+                isBookmarked = isBookmarked
             )
         }
+
+    init {
+        initialize()
+    }
 
     //create an initializer
     private fun initialize() {
